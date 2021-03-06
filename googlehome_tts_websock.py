@@ -1,3 +1,4 @@
+# encoding: utf8
 from __future__ import print_function, unicode_literals
 from websocket_server import WebsocketServer
 import pychromecast
@@ -8,6 +9,7 @@ import threading
 import time
 
 """
+pip install websocket-server
 pip install pychromecast
 pip install gTTS
 """
@@ -26,7 +28,7 @@ def say(text):
     tts = gTTS(text=text, lang="ja")
     tts.save("tmp.mp3")
 
-    ghome.media_controller.play_media("http://192.168.0.9:8000/tmp.mp3", "audio/mp3")
+    ghome.media_controller.play_media("http://192.168.0.103:8000/tmp.mp3", "audio/mp3")
 
 def message_received(client, server, message):
     # 日本語の文字コードがおかしいので修正
