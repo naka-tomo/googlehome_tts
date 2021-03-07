@@ -33,8 +33,11 @@ def say(text):
 def message_received(client, server, message):
     # 日本語の文字コードがおかしいので修正
     message = bytes(message, "iso-8859-1").decode("utf8")
-    print(message)
-    say(message)
+    print("recieved data:", message)
+    if message.startswith("http"):
+        ghome.media_controller.play_media(message, "audio/mp3")
+    else:
+        say(message)
 
 def new_client(client, server):
     print("クライアント接続")
@@ -56,7 +59,7 @@ def main():
     ghome.wait()
 
     # webscoket serverを起動
-    server = WebsocketServer(50000, host="127.0.0.1")
+    server = WebsocketServer(50000, host="192.168.0.103")
     server.set_fn_new_client(new_client)
     server.set_fn_client_left(client_left)
     server.set_fn_message_received(message_received) 
