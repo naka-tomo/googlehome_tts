@@ -5,47 +5,51 @@ import http.server
 import socketserver
 import threading
 import time
+from urllib.parse import urlparse, parse_qs, unquote
 
-"""
-pip install pychromecast
-pip install gTTS
+PORT = 8000
+SERVER_IP = "192.168.0.103"
+GOOGLE_HOME_IP = "192.168.0.50"
 
-"""
+ghome = pychromecast.Chromecast( GOOGLE_HOME_IP  )
+ghome.wait()
+def say( text ):
+    if text.startswith("http"):
+        # URLの場合はそのまま再生
+        url = text
+        print("play")
+    else: 
+        # 文字列の場合は音声ファイルに変換
+        tts = gTTS(text=text, lang="ja")
+        tts.save("tmp.mp3")
 
-ghome = None
+        url = "http://" + SERVER_IP + ":" + str(PORT) + "/tmp.mp3"
+        print( url )
 
-def http_server_thread():
-    PORT = 8000
-    Handler = http.server.SimpleHTTPRequestHandler
+    ghome.media_controller.play_media( url, "audio/mp3")
 
-    with socketserver.TCPServer(("", PORT), Handler) as httpd:
-        print("serving at port", PORT)
-        httpd.serve_forever()
+class ServerHandler(http.server.SimpleHTTPRequestHandler):
+    def do_POST(self):
+        content_len  = int(self.headers.get("content-length"))
+        req_body = self.rfile.read(content_len).decode("utf-8")
 
-def say(text):
-    tts = gTTS(text=text, lang="ja")
-    tts.save("tmp.mp3")
+        print( "data", req_body )
+        if req_body.startswith("text="):
+            text = req_body[5:]
+            print(text)
+            say( text )
 
-    ghome.media_controller.play_media("http://192.168.0.9:8000/tmp.mp3", "audio/mp3")
-
+        body = "recieved"
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html; charset=utf-8')
+        self.send_header('Content-length', len(body.encode()))
+        self.end_headers()
+        self.wfile.write(body.encode())
 
 def main():
-    global ghome
-
-    # httpサーバーを起動
-    t = threading.Thread( target=http_server_thread )
-    t.setDaemon(True)
-    t.start()
-
-    # googlehomeに接続
-    ghome = pychromecast.Chromecast("192.168.0.50")
-    ghome.wait()
-
-    say("テスト")
-
-    time.sleep(5)
-    print("終了")
-
+    with socketserver.TCPServer(("", PORT), ServerHandler) as httpd:
+        print("serving at port", PORT)
+        httpd.serve_forever()
 
 if __name__=="__main__":
     main()
