@@ -1,6 +1,6 @@
 # GoogleHome TTS
 
-Python実装の[Google Home Notifier](https://github.com/noelportugal/google-home-notifier)的なもの
+Python実装の[Google Home Notifier](https://github.com/noelportugal/google-home-notifier)的なもの．GoogleHomeをしゃべらせたり，GoogleHomeで音楽を再生できます．
 
 ## インストール
 
