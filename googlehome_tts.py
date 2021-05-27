@@ -32,6 +32,7 @@ class ServerHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         content_len  = int(self.headers.get("content-length"))
         req_body = self.rfile.read(content_len).decode("utf-8")
+        req_body = unquote(req_body)
 
         print( "data", req_body )
         if req_body.startswith("text="):

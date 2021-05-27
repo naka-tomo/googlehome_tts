@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>PostText</title>
+</head>
+<body>
+    <input id="text" type="text"><button id="post">post</button> 
+<script>
+  document.getElementById('post').onclick = post;
+
+  function post(){
+    var text = document.getElementById("text").value;
+    var request = new XMLHttpRequest();
+    request.open("POST", "http://192.168.0.103:8000", true);
+    request.send(text)
+  };
+</script>
+
+</body>
+</html>
