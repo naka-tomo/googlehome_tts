@@ -29,17 +29,20 @@ GOOGLE_HOME_IP = "192.168.0.50"  # GoogleHomeのIPアドレス
 
 - GoogleHomeをしゃべらせる場合：
   ```
-  curl -X POST -d "text=hello" https://（サーバーのIP）:（ポート）
+  curl -X POST -d "text=hello" http://（サーバーのIP）:（ポート）
   ```
 
-- GoogleHomeでWeb上のMP3(https://****/hoge.mp3)を再生する場合：
+- GoogleHomeでWeb上のMP3(http://****/hoge.mp3)を再生する場合：
   ```
-  curl -X POST -d "text=https://****/hoge.mp3" https://（サーバーのIP）:（ポート）
+  curl -X POST -d "text=http://****/hoge.mp3" http://（サーバーのIP）:（ポート）
   ```
 
 - GoogleHomeでローカルなMP3を再生する場合：  
   MP3ファイル（hoge.mp3）をgooglehome_tts.pyと同じディレクトリにコピー
   ```
-  curl -X POST -d "text=https://（サーバーのIP）:（ポート）/hoge.mp3" https://（サーバーのIP）:（ポート）
+  curl -X POST -d "text=http://（サーバーのIP）:（ポート）/hoge.mp3" http://（サーバーのIP）:（ポート）
   ```
 
+- その他の送信方法  
+　　- [pythonスクリプトから送信](post.py)  
+　　- [htmlから送信](post.html)
