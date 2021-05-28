@@ -48,6 +48,7 @@ class ServerHandler(http.server.SimpleHTTPRequestHandler):
         self.wfile.write(body.encode())
 
 def main():
+    socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("", PORT), ServerHandler) as httpd:
         print("serving at port", PORT)
         httpd.serve_forever()
