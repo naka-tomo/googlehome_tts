@@ -8,11 +8,13 @@ import time
 from urllib.parse import urlparse, parse_qs, unquote
 
 PORT = 8000
-SERVER_IP = "192.168.0.103"
-GOOGLE_HOME_IP = "192.168.0.50"
+SERVER_IP = "192.168.0.155"
 
-ghome = pychromecast.Chromecast( GOOGLE_HOME_IP  )
+casts, browser = pychromecast.get_chromecasts()
+ghome = casts[0]
 ghome.wait()
+browser.stop_discovery()
+
 def say( text ):
     if text.startswith("http"):
         # URLの場合はそのまま再生
