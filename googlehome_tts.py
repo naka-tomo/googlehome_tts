@@ -7,6 +7,8 @@ import socketserver
 import threading
 import time
 from urllib.parse import urlparse, parse_qs, unquote
+import os
+import sys
 
 PORT = 8000
 SERVER_IP = "192.168.0.155"
@@ -23,21 +25,9 @@ def connect_google_home():
             continue
 
         ghome = casts[0]
-        ghome.register_connection_listener(ConnectionWatcher())
         ghome.wait()
         browser.stop_discovery()
         return ghome
-
-
-class ConnectionWatcher(ConnectionStatusListener):
-    is_connected = False
-    def new_connection_status(self, status):
-        if status.status=="LOST":
-            print("Lost connection. ")
-            ConnectionWatcher.is_connected = False
-        elif status.status=="CONNECTED":
-            print("Connected. ")
-            ConnectionWatcher.is_connected = True
 
 def say( text ):
     if ghome is None:
@@ -93,10 +83,12 @@ def main():
     th.start()
 
     while 1:
-        if ConnectionWatcher.is_connected==False:
+        if ghome.socket_client.is_connected==False:
             ghome.disconnect()
-            ghome = None
-            ghome = connect_google_home()
+
+            # 新たなプロセスで再実行
+            print("Restart process")
+            os.execv(sys.executable, ["python", __file__])
 
         time.sleep(0.1)
 
