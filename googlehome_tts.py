@@ -1,6 +1,5 @@
 from __future__ import print_function, unicode_literals
 import pychromecast
-from pychromecast.socket_client import ConnectionStatusListener
 from gtts import gTTS
 import http.server
 import socketserver
@@ -90,7 +89,7 @@ def main():
             print("Restart process")
             os.execv(sys.executable, ["python", __file__])
 
-        time.sleep(0.1)
+        time.sleep(0.01)
 
 if __name__=="__main__":
     main()
