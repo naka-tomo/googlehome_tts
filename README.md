@@ -43,6 +43,13 @@ GOOGLE_HOME_IP = "192.168.0.50"  # GoogleHomeのIPアドレス
   curl -X POST -d "text=http://（サーバーのIP）:（ポート）/hoge.mp3" http://（サーバーのIP）:（ポート）
   ```
 
+- 音量の変更：  
+  `(volume)`に0〜１の値を入れる
+  ```
+  curl -X POST -d "text=set_volume:（volume）" http://（サーバーのIP）:（ポート）
+  ```
+
+
 - その他の送信方法  
 　　- [pythonスクリプトから送信](post.py)  
 　　- [htmlから送信](post.html)

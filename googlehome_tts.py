@@ -37,6 +37,11 @@ def say( text ):
         # URLの場合はそのまま再生
         url = text
         print("play")
+        ghome.media_controller.play_media( url, "audio/mp3")
+    elif text.startswith( "set_volume:" ):
+        print(text)
+        volume = float(text.split(":")[1])
+        ghome.set_volume(volume)
     else: 
         # 文字列の場合は音声ファイルに変換
         tts = gTTS(text=text, lang="ja")
@@ -44,8 +49,9 @@ def say( text ):
 
         url = "http://" + SERVER_IP + ":" + str(PORT) + "/tmp.mp3"
         print( url )
+        ghome.media_controller.play_media( url, "audio/mp3")
 
-    ghome.media_controller.play_media( url, "audio/mp3")
+
     return True
 
 class ServerHandler(http.server.SimpleHTTPRequestHandler):
