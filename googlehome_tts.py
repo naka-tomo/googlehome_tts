@@ -42,6 +42,10 @@ def say( text ):
         print(text)
         volume = float(text.split(":")[1])
         ghome.set_volume(volume)
+    elif text.startswith( "restart" ):
+        # 新たなプロセスで再実行
+        print("Restart process")
+        os.execv(sys.executable, ["python", __file__])
     else: 
         # 文字列の場合は音声ファイルに変換
         tts = gTTS(text=text, lang="ja")
@@ -87,8 +91,10 @@ def main():
     th.daemon = True
     th.start()
 
+    start_time = time.time()
     while 1:
-        if ghome.socket_client.is_connected==False:
+        # 接続が切れた場合，または6時間経過したら再起動
+        if ghome.socket_client.is_connected==False or time.time()-start_time>3600*6:
             ghome.disconnect()
 
             # 新たなプロセスで再実行
